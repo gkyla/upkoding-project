@@ -74,5 +74,13 @@ input.addEventListener('input', function () {
   }
 });
 
+// Default will be disabled (because of data not being fetched yet)
+input.setAttribute('disabled', true);
+
 // Wait till the fetch process complete
-getUserData().then(() => renderUser(userData));
+getUserData().then(() => {
+  // Remove the disabled attribute
+  input.removeAttribute('disabled');
+
+  renderUser(userData);
+});
