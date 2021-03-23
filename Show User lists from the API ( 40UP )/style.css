@@ -1,0 +1,105 @@
+:root {
+  --shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+  --black: #393e46;
+  --yellow: #ffd369;
+  --white: #eeeeee;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--black);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.wrapper {
+  max-width: 1240px;
+  width: 100%;
+  padding: 20px;
+}
+
+form {
+  background-color: var(--yellow);
+  width: 100%;
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 700;
+}
+
+form > * {
+  margin: 5px 0;
+}
+
+input {
+  padding: 0.75rem;
+  border: none;
+  box-shadow: var(--shadow);
+  border-radius: 0.5rem;
+}
+
+img {
+  max-width: 100%;
+  box-shadow: var(--shadow);
+  border-radius: 100%;
+}
+
+.title {
+  font-size: 1.5rem;
+}
+
+.info-section {
+  width: 100%;
+}
+
+.img-section {
+  width: 100%;
+}
+
+.username {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 20px;
+  color: brown;
+  margin: 5px 0;
+}
+
+.box {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  padding: 20px;
+  background-color: var(--white);
+  display: grid;
+  width: 100%;
+  gap: 20px;
+  box-shadow: var(--shadow);
+  border-radius: 1rem;
+  margin: 20px 0;
+}
+
+.box.empty {
+  font-size: 2rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.card {
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
