@@ -4,6 +4,7 @@ const inputNumber = document.querySelector('#numberOption');
 let userData = [];
 let perPage = null;
 let page = null;
+let tempPage = null;
 
 const paginationItemBox = document.querySelector('.pagination-item-box');
 const paginationOption = document.querySelectorAll('.pagination-option');
@@ -61,8 +62,8 @@ if (window.location.search) {
 } else {
   getUserData(DEFAULT_API_URL)
     .then(() => {
-      page = userData.page;
-      perPage = userData.per_page;
+      // page = userData.page;
+      // perPage = userData.per_page;
 
       // Render
       renderUser(userData);
@@ -119,6 +120,8 @@ function renderUser(arr) {
          </div>
         `;
   });
+  console.log('page :', page);
+  console.log('total_pages:', userData.total_pages);
 
   page = arr.page;
 }
@@ -189,26 +192,17 @@ inputNumber.addEventListener('change', async function () {
     current Problem = page variable not updated 
   */
 
-  perPage = this.value;
-
-  const generate = generateAPIURL(perPage, page);
-  const splittedUrl = generate.split('/');
-  const params = splittedUrl[splittedUrl.length - 1];
-
-  const adaGa = userData.pageAvailable.includes(page);
-  if (!adaGa) {
-    page = Math.round(userData.total / perPage);
-  } else {
-    // const find = userData.pageAvailable.find((num) => num === page);
-    // page = params.inclu
-    // page = find;
-    console.log(params);
-  }
-
   try {
-    history.pushState({ search: params }, null, params);
+    perPage = this.value;
+
+    console.log('change-page :', page);
+    const generate = generateAPIURL(perPage, page);
+    const splittedUrl = generate.split('/');
+    const params = splittedUrl[splittedUrl.length - 1];
+
     // Change url without refreshing using history API
 
+    history.pushState({ search: params }, null, params);
     await getUserData(generate);
     renderUser(userData);
     renderPagination(userData);
