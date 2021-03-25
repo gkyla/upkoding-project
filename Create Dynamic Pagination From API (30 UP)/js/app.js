@@ -15,6 +15,7 @@ function generateAPIURL(per_page, page) {
 }
 
 async function getUserData(url) {
+  console.log(url);
   try {
     const res = await fetch(url);
     const payload = await res.json();
@@ -62,8 +63,8 @@ if (window.location.search) {
 } else {
   getUserData(DEFAULT_API_URL)
     .then(() => {
-      // page = userData.page;
-      // perPage = userData.per_page;
+      page = userData.page;
+      perPage = userData.per_page;
 
       // Render
       renderUser(userData);
@@ -94,36 +95,10 @@ function renderPagination(arr) {
 
     i++;
   }
+
+  tempPage = userData.pageAvailable;
+
   handlePagination();
-}
-
-function renderUser(arr) {
-  console.log('kerender');
-
-  inputNumber.value = arr.per_page;
-  inputNumber.max = arr.total;
-
-  box.classList.remove('empty');
-  box.innerHTML = '';
-
-  arr.data.forEach((user) => {
-    box.innerHTML += `
-        <div class="card">
-          <div class="img-section">
-              <img src="${user.avatar}" alt="${user.first_name} Profile picture" />
-          </div>
-          <div class="info-section">
-              <span class="username">${user.username}</span>
-              <h1 class="title">${user.first_name} ${user.last_name}</h1>
-              <p class="email">${user.email}</p>
-          </div>
-         </div>
-        `;
-  });
-  console.log('page :', page);
-  console.log('total_pages:', userData.total_pages);
-
-  page = arr.page;
 }
 
 paginationOption.forEach((option) => {
@@ -187,26 +162,80 @@ function handlePagination() {
   });
 }
 
+function renderUser(arr) {
+  inputNumber.value = arr.per_page;
+  inputNumber.max = arr.total;
+  inputNumber.min = 1;
+
+  box.classList.remove('empty');
+  box.innerHTML = '';
+
+  arr.data.forEach((user) => {
+    box.innerHTML += `
+        <div class="card">
+          <div class="img-section">
+              <img src="${user.avatar}" alt="${user.first_name} Profile picture" />
+          </div>
+          <div class="info-section">
+              <span class="username">${user.username}</span>
+              <h1 class="title">${user.first_name} ${user.last_name}</h1>
+              <p class="email">${user.email}</p>
+          </div>
+         </div>
+        `;
+  });
+  console.log('page :', page);
+  console.log('total_pages:', userData.total_pages);
+
+  if (page > userData.total_pages) {
+    page = userData.total_pages;
+  } else {
+    page = arr.page;
+  }
+}
+
 inputNumber.addEventListener('change', async function () {
   /* 
     current Problem = page variable not updated 
-  */
+    // total 12
+    // 12 / perPage ( 12/ 1) - (12/3 ) 
 
+    if (userData.total_pages < perPage) {
+      page = 1;
+    }
+  */
   try {
     perPage = this.value;
-
-    console.log('change-page :', page);
     const generate = generateAPIURL(perPage, page);
     const splittedUrl = generate.split('/');
     const params = splittedUrl[splittedUrl.length - 1];
-
-    // Change url without refreshing using history API
-
+    console.log(generate);
     history.pushState({ search: params }, null, params);
     await getUserData(generate);
     renderUser(userData);
     renderPagination(userData);
+
+    console.log(userData.total_pages);
+    if (userData.total_pages < userData.total) {
+      const generate = generateAPIURL(perPage, page);
+      const splittedUrl = generate.split('/');
+      const params = splittedUrl[splittedUrl.length - 1];
+      console.log(generate);
+
+      history.pushState({ search: params }, null, params);
+      await getUserData(generate);
+      renderUser(userData);
+      renderPagination(userData);
+
+      console.log(page);
+    }
+
+    // if (userData.total / perPage > userData.total_pages) {
+    //   page = 1;
+    // }
   } catch (error) {
     console.log(error);
   }
 });
+
+function getDataRelocateURL() {}
