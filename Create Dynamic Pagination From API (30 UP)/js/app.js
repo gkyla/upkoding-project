@@ -1,14 +1,14 @@
-import { renderPagination, renderUser } from './template.js';
+import { renderPagination, mainRenderPage } from './template.js';
 import {
   getDataRelocateURL,
   generateAPIURL,
   getUserData,
 } from './utilities.js';
 
+let userData = [];
+
 const DEFAULT_API_URL = 'https://reqres.in/api/users/?per_page=2&page=1';
 const inputNumber = document.querySelector('#numberOption');
-
-let userData = [];
 const paginationOption = document.querySelectorAll('.pagination-option');
 
 /* 
@@ -32,24 +32,22 @@ if (window.location.search) {
   getUserData(generateAPIURL(userData.per_page, userData.page), userData)
     .then((data) => {
       userData = data;
-      renderUser(userData);
-      renderPagination(userData);
+      mainRenderPage(userData);
     })
     .catch((err) => err);
 } else {
   /* If the user doesnt have some query, then
-    fetch the API with default link variable declaration (DEFAULT_API_URL)
+    fetch the API with default link on DEFAULT_API_URL variable declaration 
   */
-
   getUserData(DEFAULT_API_URL, userData)
     .then((data) => {
       userData = data;
-      renderUser(userData);
-      renderPagination(userData);
+      mainRenderPage(userData);
     })
     .catch((err) => err);
 }
 
+// Handling for Pagination Number
 paginationOption.forEach((option) => {
   option.addEventListener('click', async () => {
     if (option.classList.contains('pagination-next')) {

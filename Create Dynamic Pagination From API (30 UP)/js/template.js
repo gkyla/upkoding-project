@@ -1,4 +1,4 @@
-import { handlePagination } from './utilities.js';
+import { handlePaginationControl } from './utilities.js';
 
 const paginationItemBox = document.querySelector('.pagination-item-box');
 const inputNumber = document.querySelector('#numberOption');
@@ -22,14 +22,22 @@ export function renderPagination(arr) {
     i++;
   }
   // handle for number pagination
-  handlePagination(arr);
+  handlePaginationControl(arr);
+}
+
+export function renderOption(arr) {
+  inputNumber.innerHTML = '';
+
+  let i = 1;
+  while (i <= arr.total) {
+    inputNumber.innerHTML += `<option value="${i}" class="input-option">${i}</option>`;
+    i++;
+  }
+  const option = document.querySelectorAll('.input-option');
+  option[arr.per_page - 1].selected = true;
 }
 
 export function renderUser(arr) {
-  inputNumber.value = arr.per_page;
-  inputNumber.max = arr.total;
-  inputNumber.min = 1;
-
   box.classList.remove('empty');
   box.innerHTML = '';
 
@@ -52,5 +60,30 @@ export function renderUser(arr) {
     arr.page = arr.total_pages;
   } else {
     arr.page = arr.page;
+  }
+}
+
+export function renderEmpty() {
+  box.innerHTML = `
+  Sorry no data found 😭
+  <br> 
+  Seems like the query you given is not available 
+  <br>
+  or the server is on a problem
+  `;
+  box.classList.add('empty');
+}
+
+export function mainRenderPage(userData) {
+  renderUser(userData);
+  renderPagination(userData);
+  renderOption(userData);
+
+  /* 
+    Since the API doesnt throw error an error if the query is not valid 
+    then we are just going to check if data is empty 
+  */
+  if (userData.data.length === 0) {
+    renderEmpty(userData);
   }
 }

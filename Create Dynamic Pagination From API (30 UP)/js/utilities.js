@@ -43,7 +43,7 @@ export async function getDataRelocateURL(arr, func) {
   return data;
 }
 
-export function handlePagination(arr) {
+export function handlePaginationControl(arr) {
   const paginationNumber = document.querySelectorAll('.pagination-number');
 
   paginationNumber.forEach((el) => {
