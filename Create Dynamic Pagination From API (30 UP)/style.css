@@ -46,7 +46,11 @@ form > * {
   margin: 5px 0;
 }
 
-input {
+.select-wrapper {
+  position: relative;
+}
+
+select {
   padding: 0.75rem;
   border: none;
   box-shadow: var(--shadow);
