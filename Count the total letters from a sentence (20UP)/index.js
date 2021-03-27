@@ -45,5 +45,5 @@ The sentence that you input is : ${sentence}
       } character${resultObj[prop] > 1 ? 's' : ''}`
     );
   }
-  box.innerHTML = 'Check your detail on the console browser ✨';
+  box.innerHTML = 'Check your console browser/node for the detail ✨';
 }
