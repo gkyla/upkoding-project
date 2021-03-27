@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ideal weight counter</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="wrapper">
+      <form>
+        <div class="mode-wrapper">
+          <span>Gender</span>
+          <div class="female">
+            <input type="radio" id="female" name="mode" value="female" />
+            <label for="female" for="female">Female</label>
+          </div>
+          <div class="male">
+            <input type="radio" id="male" name="mode" value="male" />
+            <label for="male" for="male">Male</label>
+          </div>
+        </div>
+        <div class="height-wrapper">
+          <label for="height">Height</label>
+          <div class="height-input input-details">
+            <input
+              type="number"
+              placeholder="Minimal is 100"
+              min="100"
+              id="height"
+              name="height"
+            />
+            <p class="cm">CM</p>
+          </div>
+        </div>
+        <div class="weight-wrapper">
+          <label for="weight">Weight</label>
+          <div class="weight-input input-details">
+            <input
+              type="text"
+              id="weight"
+              name="weight"
+              placeholder="Weight Result"
+            />
+            <p class="kg">KG</p>
+          </div>
+        </div>
+        <button type="submit" class="btn">Count</button>
+      </form>
+    </div>
+
+    <script src="./index.js"></script>
+  </body>
+</html>
