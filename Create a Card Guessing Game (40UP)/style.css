@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
+
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 250px));
+  gap: 20px;
+}
+
+.card-game {
+  cursor: pointer;
+  border: 2px solid black;
+  padding: 20px;
+  border-radius: 20px;
+}
