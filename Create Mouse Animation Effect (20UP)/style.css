@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+.cursor-style {
+  --size: 50px;
+
+  transition: 0.2s ease-in-out background-color, border;
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  margin-top: -25px;
+  margin-left: -25px;
+  border-radius: 100%;
+  background-color: #3a4750;
+}
