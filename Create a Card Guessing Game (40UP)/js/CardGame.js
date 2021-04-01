@@ -77,7 +77,7 @@ class CardGame {
     }
   }
 
-  populateHTML() {
+  createHTMLMarkup() {
     this.appContainer.innerHTML = `
       <card-game-board></card-game-board>
       `;
@@ -91,15 +91,13 @@ class CardGame {
     let firstIdentity = null;
     let secondIdentity = null;
 
-    cardsEl.forEach((el) => {
-      el.addEventListener('click', (e) => {
-        const identity = el.dataset.identity;
+    cardsEl.forEach((card) => {
+      card.addEventListener('click', (e) => {
+        const identity = card.dataset.identity;
         e.target.classList.add('choosen');
-        counter += 1;
-        const theCorrectChoosen = document.querySelectorAll('.choosen');
+        const choosenCards = document.querySelectorAll('.choosen');
 
-        // Todo if total of data-correct element is equals to this.total
-        // then we can conclude we already finished the game a.k.a win
+        counter += 1;
 
         switch (counter) {
           case 1:
@@ -111,18 +109,21 @@ class CardGame {
             counter = 0;
 
             if (firstIdentity === secondIdentity) {
-              theCorrectChoosen.forEach((el) => {
-                el.setAttribute('data-correct', 'true');
-                el.classList.remove('choosen');
-                el.style.visibility = 'hidden';
+              choosenCards.forEach((choosen) => {
+                choosen.setAttribute('data-correct', 'true');
+                choosen.classList.remove('choosen');
+                choosen.style.visibility = 'hidden';
               });
               this.score += 1;
               this.checkWinner();
             } else {
-              theCorrectChoosen.forEach((el) => {
-                el.classList.remove('choosen');
+              choosenCards.forEach((choosen) => {
+                choosen.classList.remove('choosen');
               });
-              this.score -= 1;
+
+              if (this.score > 0) {
+                this.score -= 1;
+              }
             }
 
             score.innerHTML = `score : ${this.score}`;
@@ -138,7 +139,7 @@ class CardGame {
     // Order functions are really important
 
     this.verifyImg();
-    this.populateHTML(); // Container boilerplate
+    this.createHTMLMarkup(); // boilerplate
     this.createCardIdentity();
     this.randomizeCard();
     this.renderCard();
