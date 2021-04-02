@@ -9,6 +9,37 @@ class CardGame {
     this.score = 0;
     this.eachPicture = this.total / this.variant;
     this.cards = [];
+    this.duration = 100;
+    this.diff = 'easy';
+  }
+
+  diffLevel() {
+    // TODO Grab the level from the select option
+    // this.level
+    const select = document.querySelector('.level');
+    select.addEventListener('change', () => {
+      this.level = select.selectedOptions[0].value;
+
+      switch (this.level) {
+        case 'easy':
+          this.duration = 100;
+          break;
+        case 'medium':
+          this.duration = 60;
+          break;
+        case 'hard':
+          this.duration = 40;
+          break;
+        case 'expert':
+          this.duration = 20;
+          break;
+        default:
+          console.error('Oops something went wrong');
+      }
+
+      console.log(this.duration);
+      console.log(this.level);
+    });
   }
 
   verifyImg() {
@@ -81,6 +112,8 @@ class CardGame {
     this.appContainer.innerHTML = `
       <card-game-board></card-game-board>
       `;
+
+    this.diffLevel();
   }
 
   activatePairingCardFunctionality() {

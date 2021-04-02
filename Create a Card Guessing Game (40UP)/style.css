@@ -5,9 +5,12 @@
 }
 
 :root {
-  --black: #303841;
+  --black: #364547;
+  --green: #2f5d62;
   --lightBlack: #3a4750;
   --red: #d72323;
+  --yellow: #ffe268;
+  --orange: #ffb037;
   --white: #eeeeee;
 }
 
@@ -37,22 +40,29 @@ card-game-board {
 }
 
 .start-modal {
+  display: none;
+  background-color: rgba(192, 189, 189, 0.842);
+  align-items: center;
+  justify-content: center;
+}
+
+.start-modal.open {
+  display: flex;
+  z-index: 99;
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(192, 189, 189, 0.842);
-  z-index: 99;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .modal-content {
   padding: 80px 40px;
-  background: #222831;
+  /* background: #222831; */
+  background: var(--black);
   border-radius: 7px;
+  display: flex;
+  flex-direction: column;
   text-align: center;
 }
 
@@ -73,33 +83,38 @@ card-game-board {
   transform-style: preserve-3d;
 
   cursor: pointer;
-  border: 3px solid black;
   border-radius: 10px;
   transition: all 0.3s ease-in;
 }
 
-.front {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-
-  border-radius: 4.5px;
-  backface-visibility: hidden;
-  background: #222831;
-  overflow: hidden;
+.level {
+  padding: 0.5rem;
+  border-radius: 7px;
 }
 
+.front,
 .back {
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
+  left: 0;
   bottom: 0;
-  border-radius: 10px;
   backface-visibility: hidden;
   overflow: hidden;
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
+}
+
+.front {
+  border: 3px solid black;
+  border-radius: 10px;
+  /* background: #222831; */
+  background: var(--lightBlack);
+}
+
+.back {
+  border-radius: 10px;
+  border: 3px solid black;
+
   transform: rotateY(180deg);
   background: #ececec;
   display: flex;
@@ -118,5 +133,44 @@ card-game-board {
 }
 
 .card-game.isMatch {
+  pointer-events: none;
   transform: rotateY(180deg);
+}
+
+/* Status */
+.status {
+  background: var(--green);
+  border-radius: 7px;
+  padding: 10px;
+  color: white;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.score {
+  color: white;
+  font-weight: 500;
+  /* background-color: rgb(73, 64, 58); */
+  background-color: var(--green);
+  padding: 14px;
+  border-radius: 7px;
+}
+
+.button {
+  font-family: inherit;
+  padding: 0.7rem 1rem;
+  font-weight: 500;
+  background: var(--yellow);
+  border: none;
+  cursor: pointer;
+  margin: 10px;
+  border-radius: 7px;
+}
+
+.control > * {
+  margin: 5px 0;
+}
+
+.control {
+  margin-bottom: 20px;
 }
