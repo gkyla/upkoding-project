@@ -71,7 +71,7 @@ class CardGame {
   checkWinner() {
     const dataCorrect = document.querySelectorAll('[data-correct="true"]');
 
-    console.log(dataCorrect);
+    console.log(dataCorrect, this.total);
     if (dataCorrect.length === this.total) {
       console.log('winner !');
     }
@@ -110,15 +110,16 @@ class CardGame {
 
             if (firstIdentity === secondIdentity) {
               choosenCards.forEach((choosen) => {
-                choosen.setAttribute('data-correct', 'true');
-                choosen.classList.remove('choosen');
-                choosen.style.visibility = 'hidden';
+                setTimeout(() => {
+                  choosen.setAttribute('data-correct', 'true');
+                  choosen.classList.remove('choosen');
+                  choosen.classList.add('isMatch');
+                }, 1250);
               });
               this.score += 1;
-              this.checkWinner();
             } else {
               choosenCards.forEach((choosen) => {
-                choosen.classList.remove('choosen');
+                setTimeout(() => choosen.classList.remove('choosen'), 1250);
               });
 
               if (this.score > 0) {
@@ -126,7 +127,8 @@ class CardGame {
               }
             }
 
-            score.innerHTML = `score : ${this.score}`;
+            score.innerHTML = `Score : ${this.score}`;
+            setTimeout(() => this.checkWinner(), 1250);
             break;
           default:
             console.log('rusak swtich nya');

@@ -4,10 +4,119 @@
   box-sizing: border-box;
 }
 
+:root {
+  --black: #303841;
+  --lightBlack: #3a4750;
+  --red: #d72323;
+  --white: #eeeeee;
+}
+
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+card-game-board {
+  margin: 40px;
+}
+
+.card-game img {
+  max-width: 100%;
+  display: inline-block;
+}
+
+.card-container {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 150px));
+  gap: 20px;
+}
+
+.start-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(192, 189, 189, 0.842);
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  padding: 80px 40px;
+  background: #222831;
+  border-radius: 7px;
+  text-align: center;
+}
+
+.title {
+  /* background-color: #ececec; */
+  /* padding: 10px; */
+  color: white;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.card-game {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  width: 150px;
+  height: 250px;
+  transform-style: preserve-3d;
+
+  cursor: pointer;
+  border: 3px solid black;
+  border-radius: 10px;
+  transition: all 0.3s ease-in;
+}
+
+.front {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+
+  border-radius: 4.5px;
+  backface-visibility: hidden;
+  background: #222831;
+  overflow: hidden;
+}
+
+.back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 10px;
+  backface-visibility: hidden;
+  overflow: hidden;
+  transform: rotateY(180deg);
+  background: #ececec;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 35px;
+}
+
+.card-game > * {
+  pointer-events: none;
+}
+
+.card-game.choosen {
+  pointer-events: none;
+  transform: rotateY(180deg);
+}
+
+.card-game.isMatch {
+  transform: rotateY(180deg);
 }
