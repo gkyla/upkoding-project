@@ -12,13 +12,18 @@ const imageOption = {
   img3: './img/3.png',
 };
 
-try {
-  const cardGame = new CardGame(appContainer, {
-    imgPath: imageOption,
-  });
+(function () {
+  try {
+    const cardGame = new CardGame(appContainer, {
+      imgPath: imageOption,
+    });
 
-  // Render the Card Game to the #app(appContainer).
-  cardGame.init();
-} catch (error) {
-  console.error(error);
-}
+    // Render the Card Game to the #app(appContainer).
+    cardGame.init();
+
+    // Getting user information
+    console.log(cardGame.userState);
+  } catch (error) {
+    console.error(error);
+  }
+})();
