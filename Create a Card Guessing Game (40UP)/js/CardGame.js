@@ -1,3 +1,5 @@
+'use strict';
+
 class CardGame {
   constructor(appContainer, { imgPath }) {
     this.appContainer = appContainer;
@@ -12,26 +14,28 @@ class CardGame {
     this.wrong = 0;
     this.correct = 0;
     this.duration = 120;
+    this.cardLeft = null;
+    this.timeLeft = null;
     this.diff = 'Easy';
   }
 
   // Get user status
   get userState() {
     return {
-      score: this.score,
-      duration: this.duration,
-      diff: this.diff,
-      wrong: this.wrong,
-      correct: this.correct,
+      Diff: this.diff,
+      Score: this.score,
+      ['Time Left']: this.timeLeft,
+      Wrong: this.wrong,
+      Correct: this.correct,
     };
   }
 
   activateDiffLevel() {
     const select = document.querySelector('.level');
     select.addEventListener('change', () => {
-      this.level = select.selectedOptions[0].value;
+      this.diff = select.selectedOptions[0].value;
 
-      switch (this.level) {
+      switch (this.diff) {
         case 'Easy':
           this.duration = 120;
           break;
@@ -48,9 +52,12 @@ class CardGame {
           console.error('Oops something went wrong');
       }
 
-      const choosenLevel = document.querySelector('.choosen-level');
+      const chosenLevel = document.querySelector('.chosen-level');
       const timeSolve = document.querySelector('.time-solve');
-      choosenLevel.textContent = this.level;
+      const difficult = document.querySelector('#difficult');
+
+      chosenLevel.textContent = this.diff;
+      difficult.textContent = this.diff;
       timeSolve.textContent = this.duration;
     });
   }
@@ -75,6 +82,7 @@ class CardGame {
 
   renderCard() {
     const cardContainer = document.querySelector('.card-container');
+    cardContainer.innerHTML = '';
 
     this.cards.forEach((el, index) => {
       cardContainer.innerHTML += `
@@ -103,10 +111,11 @@ class CardGame {
       this.cards[lastIndex] = temp;
       lastIndex -= 1;
     }
-    console.log(this.cards);
   }
 
   createCardIdentity() {
+    this.cards = [];
+
     for (let prop in this.img) {
       for (let i = 1; i <= this.eachPicture; i++) {
         this.cards.push({ src: this.img[prop], identity: prop });
@@ -122,8 +131,6 @@ class CardGame {
     const winnerModal = document.querySelector('.winner-content');
 
     if (dataCorrect.length === this.total) {
-      console.log('winner !');
-      // return true;
       clearInterval(this.interval);
       modal.classList.add('open');
       startModal.classList.remove('open');
@@ -144,9 +151,8 @@ class CardGame {
   }
 
   activatePairingCardFunctionality() {
-    // grab the dom
     const cardsEl = document.querySelectorAll('.card-game');
-    // const score = document.querySelector('.score');
+
     let counter = 0;
     let firstIdentity = null;
     let secondIdentity = null;
@@ -154,8 +160,8 @@ class CardGame {
     cardsEl.forEach((card) => {
       card.addEventListener('click', (e) => {
         const identity = card.dataset.identity;
-        e.target.classList.add('choosen', 'effect');
-        const choosenCards = document.querySelectorAll('.choosen');
+        e.target.classList.add('chosen', 'effect');
+        const chosenCards = document.querySelectorAll('.chosen');
 
         counter += 1;
 
@@ -165,33 +171,36 @@ class CardGame {
             break;
           case 2:
             secondIdentity = identity;
+
             // Reset Counter
             counter = 0;
 
             if (firstIdentity === secondIdentity) {
-              choosenCards.forEach((choosen) => {
-                choosen.classList.remove('choosen');
-                choosen.classList.add('isMatch');
-                choosen.setAttribute('data-correct', 'true');
-              });
               this.score += 1;
               this.correct += 1;
+
+              chosenCards.forEach((chosen) => {
+                chosen.classList.remove('chosen');
+                chosen.classList.add('isMatch');
+                chosen.setAttribute('data-correct', 'true');
+              });
             } else {
               this.wrong += 1;
-              choosenCards.forEach((choosen) => {
-                choosen.classList.remove('choosen');
 
-                // Remove flip effect
-                setTimeout(() => {
-                  choosen.classList.remove('effect');
-                }, 700);
-              });
               if (this.score > 0) {
                 this.score -= 1;
               }
+
+              chosenCards.forEach((chosen) => {
+                chosen.classList.remove('chosen');
+
+                // Remove flip effect
+                setTimeout(() => {
+                  chosen.classList.remove('effect');
+                }, 700);
+              });
             }
 
-            // score.innerHTML = this.score;
             this.updateUserState();
             this.checkWinner();
 
@@ -204,28 +213,87 @@ class CardGame {
   }
 
   timingUpdate() {
+    /* 
+      Calling timingUpdate function will reset this.timeLeft value 
+    */
+
     const durationEl = document.querySelector('#duration');
+    this.timeLeft = this.duration;
     durationEl.textContent = this.duration;
 
+    clearInterval(this.interval);
     this.interval = setInterval(() => {
-      this.duration -= 1;
-      durationEl.textContent = this.duration;
+      this.timeLeft -= 1;
+      durationEl.textContent = this.timeLeft;
 
-      if (this.duration === 0) {
+      if (this.timeLeft === 0) {
         clearInterval(this.interval);
+        this.lose();
       }
     }, 1000);
   }
 
+  lose() {
+    // const startModal = document.querySelector('.start-modal');
+    const loseContent = document.querySelector('.lose-content');
+    const startModal = document.querySelector('.start-modal');
+    // const winnerModal = document.querySelector('.winner-content');
+    const modalInnerContent = document.querySelectorAll('.modal-inner-content');
+    modalInnerContent.forEach((modalContent) => {
+      if (modalContent.classList.contains('open')) {
+        modalContent.classList.remove('open');
+      }
+    });
+    startModal.classList.add('open');
+    loseContent.classList.add('open');
+  }
+
   updateUserState() {
-    // Grab els
+    // Grab elements
     const score = document.querySelector('.score');
     const wrong = document.querySelector('#wrong');
     const correct = document.querySelector('#correct');
+    const cardLeft = document.querySelector('#card-left');
+    const isMatch = document.querySelectorAll('.isMatch');
 
+    this.cardLeft = this.cards.length - isMatch.length;
     score.textContent = this.score;
     wrong.textContent = this.wrong;
     correct.textContent = this.correct;
+    cardLeft.textContent = this.cardLeft;
+  }
+
+  retry() {
+    /* 
+      1. Reset State
+      2. Rerender all of the card with cards data from this.cards
+      3. Re bind click listener with the new rendered cards element
+      4. reset Timing to default (with the chosen diff)
+    */
+
+    this.resetState();
+    this.renderCard();
+    this.activatePairingCardFunctionality();
+    this.timingUpdate();
+  }
+
+  newGame() {
+    /* 
+      1. Reinitialize init() method
+      2. Reset state
+    */
+
+    this.init();
+    this.resetState();
+  }
+
+  resetState() {
+    // Reset value
+
+    this.score = 0;
+    this.wrong = 0;
+    this.correct = 0;
+    this.updateUserState();
   }
 
   init() {
@@ -239,13 +307,25 @@ class CardGame {
     this.renderCard();
     this.activatePairingCardFunctionality();
 
-    // Handle Option
+    // Handle Options
     const start = document.querySelector('#start');
     const modal = document.querySelector('.start-modal');
+    const retry = document.getElementById('retry');
+    const newGame = document.querySelectorAll('.newGame');
 
     start.addEventListener('click', () => {
       modal.classList.remove('open');
       this.timingUpdate();
+    });
+
+    retry.addEventListener('click', () => {
+      this.retry();
+    });
+
+    newGame.forEach((element) => {
+      element.addEventListener('click', () => {
+        this.newGame();
+      });
     });
   }
 }

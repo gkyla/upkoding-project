@@ -1,9 +1,9 @@
+'use strict';
+
 import CardGame from './CardGame.js';
 import './components/CardGameBoard.js';
 
-// Setup
-
-// Container Parent for the card game board initialization
+// Container Parent for card game board initialization
 const appContainer = document.querySelector('#app');
 
 const imageOption = {
