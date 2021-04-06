@@ -14,7 +14,7 @@ class CardGame {
     this.wrong = 0;
     this.correct = 0;
     this.duration = 120;
-    this.cardLeft = null;
+    this.cardLeft = 0;
     this.timeLeft = null;
     this.diff = 'Easy';
   }
@@ -25,6 +25,7 @@ class CardGame {
       Diff: this.diff,
       Score: this.score,
       ['Time Left']: this.timeLeft,
+      ['Card Left']: this.cardLeft,
       Wrong: this.wrong,
       Correct: this.correct,
     };
@@ -126,25 +127,35 @@ class CardGame {
   checkWinner() {
     const dataCorrect = document.querySelectorAll('[data-correct="true"]');
     const modal = document.querySelector('.start-modal');
-    const startModal = document.querySelector('.start-content');
-    const loseModal = document.querySelector('.lose-content');
-    const winnerModal = document.querySelector('.winner-content');
+    const modalInnerContent = document.querySelectorAll('.modal-inner-content');
 
     if (dataCorrect.length === this.total) {
       clearInterval(this.interval);
+
+      modalInnerContent.forEach((modalContent) => {
+        if (modalContent.classList.contains('open')) {
+          modalContent.classList.remove('open');
+        }
+
+        if (modalContent.classList.contains('winner-content')) {
+          modalContent.classList.add('open');
+        }
+      });
       modal.classList.add('open');
-      startModal.classList.remove('open');
-      winnerModal.classList.add('open');
-      const scoreInfo = document.querySelector('.score-info');
+
+      const scoreInfo = document.querySelectorAll('.score-info');
 
       for (let prop in this.userState) {
-        scoreInfo.innerHTML += `<p>${prop} : ${this.userState[prop]}</p>`;
+        scoreInfo.forEach((scoreElement) => {
+          scoreElement.innerHTML += `<p>${prop} : ${this.userState[prop]}</p>`;
+        });
       }
     }
   }
 
   createHTMLMarkup() {
     // From CardGameBoard Component
+    this.appContainer.setAttribute('card-game-app', '');
     this.appContainer.innerHTML = `
       <card-game-board></card-game-board>
       `;
@@ -234,16 +245,28 @@ class CardGame {
   }
 
   lose() {
-    // const startModal = document.querySelector('.start-modal');
     const loseContent = document.querySelector('.lose-content');
     const startModal = document.querySelector('.start-modal');
-    // const winnerModal = document.querySelector('.winner-content');
     const modalInnerContent = document.querySelectorAll('.modal-inner-content');
+    const scoreInfo = document.querySelectorAll('.score-info');
+
     modalInnerContent.forEach((modalContent) => {
       if (modalContent.classList.contains('open')) {
         modalContent.classList.remove('open');
       }
     });
+
+    // Reset (if user press retry)
+    scoreInfo.forEach((scoreElement) => {
+      scoreElement.innerHTML = '';
+    });
+
+    for (let prop in this.userState) {
+      scoreInfo.forEach((scoreElement) => {
+        scoreElement.innerHTML += `<p>${prop} : ${this.userState[prop]}</p>`;
+      });
+    }
+
     startModal.classList.add('open');
     loseContent.classList.add('open');
   }
@@ -296,6 +319,18 @@ class CardGame {
     this.updateUserState();
   }
 
+  closeModals() {
+    const modalInnerContent = document.querySelectorAll('.modal-inner-content');
+    const startModal = document.querySelector('.start-modal');
+
+    startModal.classList.remove('open');
+    modalInnerContent.forEach((modalContent) => {
+      if (modalContent.classList.contains('open')) {
+        modalContent.classList.remove('open');
+      }
+    });
+  }
+
   init() {
     // Order functions are really important
 
@@ -310,7 +345,7 @@ class CardGame {
     // Handle Options
     const start = document.querySelector('#start');
     const modal = document.querySelector('.start-modal');
-    const retry = document.getElementById('retry');
+    const retry = document.querySelectorAll('.retry');
     const newGame = document.querySelectorAll('.newGame');
 
     start.addEventListener('click', () => {
@@ -318,8 +353,11 @@ class CardGame {
       this.timingUpdate();
     });
 
-    retry.addEventListener('click', () => {
-      this.retry();
+    retry.forEach((element) => {
+      element.addEventListener('click', () => {
+        this.closeModals();
+        this.retry();
+      });
     });
 
     newGame.forEach((element) => {
