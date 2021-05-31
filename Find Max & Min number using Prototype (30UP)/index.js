@@ -18,11 +18,11 @@ Number.prototype.minNumber = function () {
       min = split[i];
     }
   }
-  console.log(`min : ${min}`);
+  console.log(`Min : ${min}`);
   return min;
 };
 
 const myNumber = 1023;
 
-myNumber.maxNumber();
-myNumber.minNumber();
+myNumber.maxNumber(); /* Max : 3 */
+myNumber.minNumber(); /* Min : 0 */
