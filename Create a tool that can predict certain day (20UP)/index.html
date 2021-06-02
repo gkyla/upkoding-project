@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Date</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Calculate day after certain day</h1>
+
+      <form class="date-form base">
+        <label for="input-date">Please fill the day</label>
+        <div class="divider"></div>
+        <input
+          type="number"
+          name="inputDate"
+          min="1"
+          value="1"
+          id="input-date"
+        />
+        <button type="submit">Calculate</button>
+      </form>
+    </div>
+
+    <div class="container">
+      <div class="result base">
+        <h2>The day after <span class="input-user">___</span> Days is</h2>
+        <div class="day">
+          <h3 class="date-result">____</h3>
+          <p class="full-time"></p>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
